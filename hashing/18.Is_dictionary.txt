@@ -1,0 +1,98 @@
+Example Input:
+
+Input 1:
+
+ A = ["hello", "scaler", "interviewbit"]
+ B = "adhbcfegskjlponmirqtxwuvzy"
+Input 2:
+
+ A = ["fine", "none", "bush"]
+ B = "qwertyuiopasdfghjklzxcvbnm"
+
+
+Example Output
+Output 1:
+
+ 1
+Output 2:
+
+ 0
+
+
+Example Explanation
+Explanation 1:
+
+ The order shown in string B is: h < s < i (adhbcfegskjlponmirqtxwuvzy) for the given words. 
+ So, Return 1.
+Explanation 2:
+
+ "none" should be present after "bush", Since b < n (qwertyuiopasdfghjklzxcvbnm). 
+ So, Return 0.
+
+ ==================================================================================================================================
+
+
+//Approach-1 : using hashmap :
+
+let A = ["hello", "scaler", "interviewbit"];
+let B = "adhbcfegskjlponmirqtxwuvzy";
+
+// let A = ["fine", "none", "bush"];
+// let B = "qwertyuiopasdfghjklzxcvbnm";
+
+function checkOrder(A, B) {
+  const charIndexMap = {};
+  for (let i = 0; i < B.length; i++) {
+    charIndexMap[B[i]] = i;
+  }
+
+  let n = A.length;
+
+  for (let i = 0; i < n - 1; i++) {
+    let index1 = charIndexMap[A[i][0]];
+    let index2 = charIndexMap[A[i + 1][0]];
+
+    if (index1 > index2) {
+      return 0;
+    }
+    let j = 0;
+    while (index1 === index2 && j < A[i].length && j < A[i + 1].length) {
+      index1 = charIndexMap[A[i][j]];
+      index2 = charIndexMap[A[i + 1][j]];
+
+      if (index1 > index2) {
+        return 0;
+      } else if (index1 < index2) {
+        break;
+      }
+      j++;
+    }
+    if (index1 === index2 && A[i].length > A[i + 1].length) {
+      return 0;
+    }
+  }
+  return 1;
+}
+
+// Example usage:
+const input1 = A;
+const order1 = B;
+let ans = checkOrder(input1, order1); // Output: 1
+console.log(ans);
+// This part of the code is checking for a special case where the first characters of two consecutive words in array A are the same according to the order specified in string B.In such cases, it compares the lengths of these two words.If the length of the current word(A[i]) is greater than the length of the next word(A[i + 1]), it implies that the current word should appear after the next word lexicographically, which violates the sorted order, and hence the function returns 0.
+
+// Let's illustrate this with an example:
+
+// let A = ["apple", "app", "application"];
+// let B = "abcdefghijklmnopqrstuvwxyz";
+
+// // In this example, the first characters of all words are the same ('a').
+// // So, according to the provided logic, the lengths of the words will be compared.
+// // Since "apple" (length = 5) > "app" (length = 3), the function should return 0.
+
+// console.log(solve(A, B)); // Output: 0
+// Here, "apple" should appear after "app" to maintain the lexicographical order specified by string B, but it appears before "app" in the array A.Therefore, the function returns 0 according to the provided logic.
+
+
+
+================================================================================================================================================================================

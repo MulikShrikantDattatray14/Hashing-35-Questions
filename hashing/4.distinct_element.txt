@@ -1,0 +1,45 @@
+// let A = [10, 5, 3, 4, 3, 5, 6];
+// let ans = solve(A);
+// console.log(ans);
+
+// // approach -1 :
+
+// function solve(arr) {
+//   let n = arr.length;
+//   let m = new Map();
+//   for (let i = 0; i < n; i++) {
+//     if (m.has(arr[i])) {
+//       m.set(arr[i], m.get(arr[i]) + 1);
+//     } else {
+//       m.set(arr[i], 1);
+//     }
+//   }
+//   return m.size; // distinct elements
+// }
+
+// approach -2 :
+
+// let set = new Set(A);
+// return set.size;
+
+// //======================================================================================================================================================================
+// //check all elements are distinct or not :
+// ----------------------------------------
+
+let A = [10, 5, 3, 4, 6, 5, 3, 6, 10];
+let ans = solve(A);
+console.log(ans);
+function solve(arr) {
+  let n = arr.length;
+  let m = new Map();
+  for (let i = 0; i < n; i++) {
+    if (m.has(arr[i])) {
+      m.set(arr[i], m.get(arr[i]) + 1);
+    } else {
+      m.set(arr[i], 1);
+    }
+  }
+  return A.length === m.size; // distinct elements
+}
+
+//======================================================================================================================================================================

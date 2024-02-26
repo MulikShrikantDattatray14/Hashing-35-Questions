@@ -1,0 +1,134 @@
+Problem Description :
+
+Given two arrays of integers A and B of size N each, where each pair (A[i], B[i]) for 0 <= i < N represents a unique point (x, y) in a 2-D Cartesian plane.
+
+Find and return the number of unordered quadruplet (i, j, k, l) such that (A[i], B[i]), (A[j], B[j]), (A[k], B[k]) and (A[l], B[l]) form a rectangle with the rectangle having all the sides parallel to either x-axis or y-axis.
+
+
+
+Problem Constraints : 
+1 <= N <= 2000
+0 <= A[i], B[i] <= 109
+
+
+
+Input Format
+The first argument given is the integer array A.
+The second argument given is the integer array B.
+
+
+
+Output Format
+Return the number of unordered quadruplets that form a rectangle.
+
+
+
+Example Input
+Input 1:
+
+ A = [1, 1, 2, 2]
+ B = [1, 2, 1, 2]
+Input 1:
+
+ A = [1, 1, 2, 2, 3, 3]
+ B = [1, 2, 1, 2, 1, 2]
+
+
+Example Output
+Output 1:
+
+ 1
+Output 2:
+
+ 3
+
+
+Example Explanation
+Explanation 1:
+
+ All four given points make a rectangle. So, the answer is 1.
+Explanation 2:
+
+ 3 quadruplets which make a rectangle are: (1, 1), (2, 1), (2, 2), (1, 2)
+                                           (1, 1), (3, 1), (3, 2), (1, 2)
+                                           (2, 1), (3, 1), (3, 2), (2, 2)
+============================================================================================
+
+// As mentioned in the hint, run two loops by fixing the two diagonally opposite rectangle ends.
+
+// We have fixed the one diagonal of the rectangle and two corner points.
+
+// From this, we can easily find the other two rectangle points.
+
+// Suppose we have two diagonally opposite points: (x1, y1) and (x2, y2). Then the other two points of the rectangle must be (x1, y2) and (x2, y1).
+
+// We have to check if these two points (x1, y2) and (x2, y1) are given or not.
+
+// If present, increment the answer.
+// We have incremented the answer twice for every rectangle because every rectangle has two diagonals.
+
+// So, our final answer will be half of the answer obtained after running two loops.
+
+function solve(A, B) {
+  let hs = new Set();
+
+  for (let i = 0; i < A.length; i++) {
+    let s1 = String(A[i]);
+    let s2 = String(B[i]);
+    let s = s1 + s2;
+    hs.add(s);
+  }
+  let count = 0;
+
+  for (let i = 0; i < A.length; i++) {
+    for (let j = i + 1; j < A.length; j++) {
+      if (A[i] !== A[j] && B[i] !== B[j]) {
+        let s1 = String(A[i]);
+        let s2 = String(B[j]);
+        let x = s1 + s2;
+
+        let s3 = String(A[j]);
+        let s4 = String(B[i]);
+        let y = s3 + s4;
+
+        if (hs.has(x) && hs.has(y)) {
+          count++;
+        }
+      }
+    }
+  }
+
+  return Math.floor(count / 2);
+}
+
+// // Example usage:
+let A = [1, 1, 2, 2, 3, 3];
+let B = [1, 2, 1, 2, 1, 2];
+let result = solve(A, B);
+console.log(result);
+
+    ========================================================================================================================================================================================================================
+
+    This JavaScript code seems to be trying to solve a problem related to finding rectangles formed by given points. Let's break it down step by step:
+
+let m = new Map();: This initializes a new Map object. Maps are key-value pairs where you can store data based on a key.
+
+The first loop: for (let i = 0; i < A.length; i++) { ... }: This loop iterates over each index i from 0 to the length of array A. Inside the loop:
+
+a. m[[A[i], B[i]]] = (m[[A[i], B[i]]] || 0) + 1;: This line calculates a unique key [A[i], B[i]] for each point (A[i], B[i]). It then increments the value associated with that key in the Map m by 1. If the key doesn't exist, it initializes it with 1.
+
+let ans = 0;: This initializes a variable ans to store the count of rectangles.
+
+The second loop: for (let i = 0; i < A.length; i++) { ... }: This loop iterates over each index i from 0 to the length of array A. Inside this loop, there's another nested loop:
+
+a. for (let j = i + 1; j < A.length; j++) { ... }: This nested loop iterates over each index j from i + 1 to the length of array A. This ensures that j is always ahead of i, avoiding redundant comparisons.
+
+b. if (A[i] === A[j] || B[i] === B[j]) { continue; }: This condition checks if the points i and j lie on the same row or column. If they do, it skips to the next iteration because a rectangle cannot be formed with points lying on the same row or column.
+
+c. if ((m[[A[i], B[j]]] || 0) != 0 && (m[[A[j], B[i]]] || 0) != 0) { ans = ans + 1; }: This condition checks if there exist two opposite points [A[i], B[j]] and [A[j], B[i]] in the Map m. If both points exist, it means there's a rectangle formed by points i and j. In that case, it increments the ans variable by 1.
+
+let ret = Math.floor(ans / 2);: After counting all possible rectangles, this line calculates half of the count and assigns it to the variable ret. This is because each rectangle is counted twice (once for each pair of opposite points).
+
+return ret;: Finally, the function returns the calculated value ret.
+
+In summary, this code is finding the count of rectangles formed by given points (A[i], B[i]), where A and B are arrays representing the x-coordinates and y-coordinates of points respectively.

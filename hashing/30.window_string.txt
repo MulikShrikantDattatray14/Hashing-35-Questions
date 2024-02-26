@@ -1,0 +1,112 @@
+Problem Description : 
+
+Given a string A and a string B, find the window with minimum length in A, which will contain all the characters in B in linear time complexity.
+Note that when the count of a character c in B is x, then the count of c in the minimum window in A should be at least x.
+
+Note:
+If there is no such window in A that covers all characters in B, return the empty string.
+If there are multiple such windows, return the first occurring minimum window ( with minimum start index and length )
+
+Problem Constraints:
+1 <= size(A), size(B) <= 106
+
+Input Format:
+The first argument is a string A.
+The second argument is a string B.
+
+Output Format:
+Return a string denoting the minimum window.
+
+Example Input:
+Input 1:
+ A = "ADOBECODEBANC"
+ B = "ABC"
+
+Input 2:
+ A = "Aa91b"
+ B = "ab"
+
+Example Output:
+Output 1:
+ "BANC"
+Output 2:
+ "a91b"
+
+
+Example Explanation:
+Explanation 1:
+ "BANC" is a substring of A which contains all characters of B.
+Explanation 2:
+ "a91b" is the substring of A which contains all characters of B.
+
+ ==========================================================================================================================================================
+function solution(s1, s2) {
+  let ans = "";
+  //https://www.youtube.com/watch?v=e1HlptlipB0
+  // step-1 : map the s2
+  let map2 = new Map();
+  for (let i = 0; i < s2.length; i++) {
+    let ch = s2.charAt(i);
+    if (map2.has(ch)) {
+      map2.set(ch, map2.get(ch) + 1);
+    } else {
+      map2.set(ch, 1);
+    }
+  }
+  let mct = 0; //match count
+  let dmct = s2.length; // desired match count- we should always try to match this count
+  let map1 = new Map();
+  let i = -1;
+  let j = -1;
+
+  while (true) {
+    let f1 = false;
+    let f2 = false;
+    // acquire
+    while (i < s1.length - 1 && mct < dmct) {
+      i++;
+      let ch = s1.charAt(i);
+      if (map1.has(ch)) {
+        map1.set(ch, map1.get(ch) + 1);
+      } else {
+        map1.set(ch, 1);
+      }
+      if ((map1.get(ch) || 0) <= (map2.get(ch) || 0)) {
+        mct++;
+      }
+      f1 = true;
+    }
+
+    // collect answer and release
+    while (j < i && mct === dmct) {
+      let pans = s1.substring(j + 1, i + 1);
+      // console.log(pans)
+      if (ans.length === 0 || pans.length < ans.length) {
+        ans = pans;
+      }
+      j++;
+      let ch = s1.charAt(j);
+
+      if (map1.get(ch) === 1) {
+        map1.delete(ch);
+      } else {
+        map1.set(ch, map1.get(ch) - 1);
+      }
+
+      if ((map1.get(ch) || 0) < (map2.get(ch) || 0)) {
+        mct--;
+      }
+      f2 = true;
+    }
+    if (f1 === false && f2 === false) break;
+  }
+  return ans;
+}
+
+// Example usage:
+let s1 = "ADOBECODEBANC";
+let s2 = "ABC";
+console.log(solution(s1, s2)); // Output: "BANC"
+
+
+===========================================================================================================================================================

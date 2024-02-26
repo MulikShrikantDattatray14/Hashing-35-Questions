@@ -1,0 +1,112 @@
+Problem Description :
+
+You are given an array A of N integers and an integer B. Count the number of pairs (i,j) such that A[i] + A[j] = B and i ≠ j.
+Since the answer can be very large, return the remainder after dividing the count with 109+7.
+Note - The pair (i,j) is same as the pair (j,i) and we need to count it only once.
+
+Problem Constraints:
+1 <= N <= 105
+1 <= A[i] <= 109
+1 <= B <= 109
+
+
+Input Format:
+First argument A is an array of integers and second argument B is an integer.
+
+
+Output Format:
+Return an integer.
+
+Example Input:
+Input 1:
+
+A = [3, 5, 1, 2]
+B = 8
+Input 2:
+
+A = [1, 2, 1, 2]
+B = 3
+
+
+Example Output:
+Output 1:
+
+1
+Output 2:
+
+4
+
+
+Example Explanation:
+Example 1:
+
+The only pair is (1, 2) which gives sum 8
+Example 2:
+
+The pair which gives sum as 3 are (1, 2), (1, 4), (2, 3) and (3, 4). 
+
+
+=========================================================================================
+// the below code counts the total no of pairs that sum to the given Target 
+// the below code counts the total no of pairs that sum to the given Target
+A = [1, 2, 1, 2];
+B = 3;
+//The pair which gives sum as 3 are (1, 2), (1, 4), (2, 3) and (3, 4).
+let ans1 = solve(A, B);
+console.log(ans1);
+//// this code is to get the pairs equals to  sum :
+function solve(A, B) {
+  B = Number(B);
+  A = A.map((n) => Number(n));
+
+  let n = A.length;
+  let m = 1000000007;
+  let count = 0;
+  let hm = new Map();
+  for (let i = 0; i < n; i++) {
+    let b = B - parseInt(A[i]);
+    if (hm.has(b)) {
+      count = (count + hm.get(b)) % m;
+    }
+    if (hm.has(A[i])) {
+      hm.set(A[i], hm.get(A[i]) + 1);
+    } else {
+      hm.set(A[i], 1);
+    }
+  }
+
+  return count;
+}
+
+
+==========================================================================================
+// this code is to get count of  the subarray with the given  sum :-
+
+function numSubarraysWithSum(nums, goal) {
+  let res = 0;
+  let curr = 0;
+  const map = new Map();
+  map.set(0, 1); // to handle 1-1 =0 , but there is no 0 in the map , so set it first only.
+  for (let i = 0; i < nums.length; i++) {
+    curr += nums[i];
+    if (map.has(curr - goal)) {
+      res += map.get(curr - goal);
+    }
+    if (map.has(curr)) {
+      map.set(curr, map.get(curr) + 1);
+    } else {
+      map.set(curr, 1);
+    }
+  }
+  console.log(map);
+  return res;
+}
+
+let nums = [1, 0, 1, 0, 1];
+let goal = 2;
+let ans = numSubarraysWithSum(nums, goal);
+console.log(ans);
+
+
+
+==========================================================================================

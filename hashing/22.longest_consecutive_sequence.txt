@@ -1,0 +1,69 @@
+Problem Description :-
+
+Given an unsorted integer array A of size N.
+Find the length of the longest set of consecutive elements from array A.
+
+Problem Constraints:
+1 <= N <= 10^6
+-106 <= A[i] <= 10^6
+
+Input Format:
+First argument is an integer array A of size N.
+
+Output Format:
+Return an integer denoting the length of the longest set of consecutive elements from the array A.
+
+Example Input:
+Input 1:
+A = [100, 4, 200, 1, 3, 2]
+Input 2:
+A = [2, 1]
+
+Example Output
+Output 1:
+ 4
+Output 2:
+ 2
+
+Example Explanation: 
+
+Explanation 1:
+ The set of consecutive elements will be [1, 2, 3, 4].
+Explanation 2:
+
+ The set of consecutive elements will be [1, 2].
+
+ ==============================================================================================================================================================================
+
+
+
+function longestConsecutive(A) {
+    //https://www.youtube.com/watch?v=oO5uLE7EUlM
+    // Create Hashset
+    const hs = new Set();
+    // Insert all elemets to Hashset
+    for (let i = 0; i < A.length; i++) {
+      hs.add(A[i]);
+    }
+    let ans = Number.MIN_SAFE_INTEGER;
+    for (let i = 0; i < A.length; i++) {
+      if (hs.has(A[i] - 1)) {
+        // if hs.has(A[i]-1) is true , then A[i] cannot be the  start of the sequence., as A[i]-1  is already present in the hashmap.
+        // to reach the start
+        continue; // because the current element is the not the start index as there is present of the cuurent -1 element in the hashmap.
+      }
+      let count = 0;
+      let val = A[i];
+      while (hs.has(val)) {
+        count++;
+        val++;
+      }
+      ans = Math.max(ans, count);
+    }
+    return ans;
+  }
+  let A = [100, 4, 200, 1, 3, 2];
+  let ans = longestConsecutive(A);
+  console.log(ans);
+  
+  //===================================================================================

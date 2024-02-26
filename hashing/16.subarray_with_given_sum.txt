@@ -1,0 +1,149 @@
+Problem Description :
+Given an array of positive integers A and an integer B, find and return first continuous subarray which adds to B.
+
+If the answer does not exist return an array with a single integer "-1".
+
+First sub-array means the sub-array for which starting index in minimum.
+
+
+
+Problem Constraints:
+1 <= length of the array <= 100000
+1 <= A[i] <= 109
+1 <= B <= 109
+
+
+
+Input Format
+The first argument given is the integer array A.
+
+The second argument given is integer B.
+
+
+
+Output Format
+Return the first continuous sub-array which adds to B and if the answer does not exist return an array with a single integer "-1".
+
+
+
+Example Input
+Input 1:
+
+ A = [1, 2, 3, 4, 5]
+ B = 5
+Input 2:
+
+ A = [5, 10, 20, 100, 105]
+ B = 110
+
+
+Example Output
+Output 1:
+
+ [2, 3]
+Output 2:
+
+ [-1]
+
+
+Example Explanation
+Explanation 1:
+
+ [2, 3] sums up to 5.
+Explanation 2:
+
+ No subarray sums up to required number.
+
+
+========================================================================================================
+A = [1, 1, 1, 2, 1];
+B = 6;
+let ans1 = solve(A, B);
+console.log(ans1);
+// here in map , we store sum and index(position)
+function solve(A, B) {
+  const map = new Map();
+  let sum = 0;
+  // map stors sum and index
+  map.set(0, 0);
+  let start = -1;
+  let end = -1;
+  let ans = [];
+  for (let i = 1; i <= A.length; i++) {
+    sum += Number(A[i - 1]);
+    if (map.has(sum - B) == true) {
+      // there occured a repeatiton in the prefix sum . so to get the required subarray , subtract the two indexes.
+      start = map.get(sum - B);
+      end = i;
+      break;
+    }
+    map.set(sum, i);
+  }
+
+  if (start == -1) {
+    ans.push(-1);
+    return ans;
+  } else return A.slice(start, end);
+}
+
+
+
+========================================================================
+//counts the subarrays with the given a sum : way-1:- 
+-----------------------------------------------------
+function numSubarraysWithSum(nums, goal) {
+  let res = 0;
+  let curr = 0;
+  const map = new Map();
+  map.set(0, 1); // to handle 1-1 =0 , but there is no 0 in the map , so set it first only
+  // here in map.set(0,1) , 1 is a frequncy
+  // thus here hashmap stores - prefixsum and its frequency
+  for (let i = 0; i < nums.length; i++) {
+    curr += nums[i];
+    if (map.has(curr - goal)) {
+      res += map.get(curr - goal);
+    }
+    if (map.has(curr)) {
+      map.set(curr, map.get(curr) + 1);
+    } else {
+      map.set(curr, 1);
+    }
+  }
+  console.log(map);
+  return res;
+}
+
+let nums = [1, 0, 1, 0, 1, 3];
+let goal = 2;
+let ans = numSubarraysWithSum(nums, goal);
+console.log(ans);
+
+
+==============================================================================================================
+//counts the subarrays with the given a sum : way-2 :- 
+----------------------------------------------------
+let nums1 = [1, 0, 1, 0, 1, 3];
+let goal1 = 2;
+let ans1 = numSubarraysWithSum(nums1, goal1);
+console.log(ans1);
+function solve(A, B) {
+  // see striver's youtube video
+  const map = new Map();
+  let sum = 0;
+  map.set(0, 0);
+  let count = 0;
+  for (let i = 1; i <= A.length; i++) {
+    sum += Number(A[i - 1]);
+    if (sum == B) count++;
+    if (map.has(sum - B) == true) {
+      count = count + map.get(sum - B);
+    }
+    if (map.has(sum)) map.set(sum, map.get(sum) + 1);
+    else map.set(sum, 1);
+  }
+  return count;
+}
+
+
+//=============================================================
+
